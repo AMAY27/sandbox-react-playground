@@ -1,0 +1,55 @@
+# CI checks for repository
+# - Runs on pushes to feature branches and on PRs targeting main
+# - Installs with pnpm, runs tests, runs pnpm audit (fails on high vulnerabilities), builds
+name: CI Checks
+
+on:
+  # Run on any branch push except main (so feature-branch pushes trigger checks)
+  push:
+    branches-ignore: [main]
+  # Run on PRs that target main
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Install / Test / Audit / Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18 (with pnpm cache)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "pnpm"
+
+      - name: Enable Corepack & activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        env:
+          CI: true
+        run: pnpm test -- --watchAll=false
+
+      - name: Run vulnerability audit (fail on high or above)
+        # pnpm audit will exit non-zero if vulnerabilities at or above the level specified are found
+        run: pnpm audit --audit-level=high || (echo "Vulnerabilities found" && exit 1)
+
+      - name: Build
+        env:
+          CI: true
+        run: pnpm build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build

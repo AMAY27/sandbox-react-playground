@@ -1,0 +1,11 @@
+# Dependabot config: weekly dependency updates
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    # If you want automatic security-only updates, you can add:
+    # allow:
+    #   - dependency-type: "direct"
