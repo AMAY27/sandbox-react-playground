@@ -1,13 +1,9 @@
-# CI checks for repository
-# - Runs on pushes to feature branches and on PRs targeting main
-# - Installs with pnpm, runs tests, runs pnpm audit (fails on high vulnerabilities), builds
+# CI checks for repository (fixed: ensure pnpm is available before setup-node cache)
 name: CI Checks
 
 on:
-  # Run on any branch push except main (so feature-branch pushes trigger checks)
   push:
     branches-ignore: [main]
-  # Run on PRs that target main
   pull_request:
     branches: [main]
 
@@ -20,16 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Make pnpm available before setup-node attempts to use it for cache restore.
+      - name: Enable Corepack & install pnpm (required before pnpm cache restore)
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
       - name: Setup Node.js 18 (with pnpm cache)
         uses: actions/setup-node@v4
         with:
           node-version: "18"
           cache: "pnpm"
-
-      - name: Enable Corepack & activate pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -40,7 +37,6 @@ jobs:
         run: pnpm test -- --watchAll=false
 
       - name: Run vulnerability audit (fail on high or above)
-        # pnpm audit will exit non-zero if vulnerabilities at or above the level specified are found
         run: pnpm audit --audit-level=high || (echo "Vulnerabilities found" && exit 1)
 
       - name: Build
