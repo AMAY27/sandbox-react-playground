@@ -23,8 +23,8 @@ devDependencies:
     specifier: 19.0.0
     version: 19.0.0
   loader-utils:
-    specifier: 3.2.1
-    version: 3.2.1
+    specifier: 3.3.1
+    version: 3.3.1
   typescript:
     specifier: 5.7.2
     version: 5.7.2
@@ -6976,8 +6976,8 @@ packages:
       json5: 2.2.3
     dev: false
 
-  /loader-utils@3.2.1:
-    resolution: {integrity: sha512-ZvFw1KWS3GVyYBYb7qkmRM/WwL2TQQBxgCK62rlvm4WpVQ23Nb4tYjApUlfjrEGvOs7KHEsmyUn75OHZrJMWPw==}
+  /loader-utils@3.3.1:
+    resolution: {integrity: sha512-FMJTLMXfCLMLfJxcX9PFqX5qD88Z5MRGaZCVzfuqeZSPsyiBzs+pahDQjbIWz2QIzPZz0NX9Zy4FX3lmK6YHIg==}
     engines: {node: '>= 12.13.0'}
 
   /locate-path@3.0.0:
@@ -8591,7 +8591,7 @@ packages:
       gzip-size: 6.0.0
       immer: 9.0.21
       is-root: 2.1.0
-      loader-utils: 3.2.1
+      loader-utils: 3.3.1
       open: 8.4.2
       pkg-up: 3.1.0
       prompts: 2.4.2
