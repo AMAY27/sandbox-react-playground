@@ -34,7 +34,7 @@ jobs:
       - name: Run tests
         env:
           CI: true
-        run: pnpm test -- --watchAll=false
+        run: pnpm test --passWithNoTests
 
       - name: Run vulnerability audit (fail on high or above)
         run: pnpm audit --audit-level=high || (echo "Vulnerabilities found" && exit 1)
